@@ -4,17 +4,23 @@ library(ggplot2)
 d <- read.csv("00270040-eng.csv",fileEncoding="latin1")
 d$Value<-as.numeric(as.character(d$Value))
 d<-d[which(d$Value>100),]
+n<-as.data.frame(table(d$GEO))
+m<-n[which(n$Freq>50),]
+d<-merge(d,m, by.x = 'GEO', by.y='Var1')
+d$GEO<-factor(d$GEO)
 
 shinyServer(function(input, output) {
   
   
   dataset <- reactive(function() {
-    #movies[sample(nrow(movies), input$sampleSize),]
-    #movies[grep(input$text,movies$title),]
+    
     if(length(input$citys)>0){
       d<-d[d$GEO %in% input$citys,]}  
     if(length(input$citys)==0){
       d<-d[!is.na(d$GEO),] }
+    if(input$unit!='All'){
+      d<-d[which(d$UNIT==input$unit),] }
+    
     #d[d$GEO %in% input$citys,] 
     #d[!is.na(d$GEO),]
     minyear <- input$year[1]

@@ -5,7 +5,10 @@ require(rpart)
 d <- read.csv("00270040-eng.csv",fileEncoding="latin1")
 d$Value<-as.numeric(as.character(d$Value))
 d<-d[which(d$Value>100),]
-
+n<-as.data.frame(table(d$GEO))
+m<-n[which(n$Freq>50),]
+d<-merge(d,m, by.x = 'GEO', by.y='Var1')
+d$GEO<-factor(d$GEO)
 
 shinyUI(
      
@@ -25,10 +28,11 @@ shinyUI(
     tags$img(src="loueh.png",alt="LOU-EH?",width="100"),
     h5("*a combination of the french term loue (to rent) and the canadian expression 'eh?'"),
     selectInput('citys', 'Choose Cities to compare rental costs:', levels(d$GEO), multiple=TRUE, selectize=TRUE),
-    checkboxInput('smooth', 'Trend Line'),
-    selectInput('color', 'Color graph by:', c('UNIT','None')),
-    selectInput('facet_row', 'Graph row Split By:', c(None='.', 'UNIT')),
-    sliderInput("year", "For which years:", 1987, 2013,value=c(1987,2013),step=1,format = "####"),
+    selectInput('unit', 'Type of Unit:',selected='All', c('All','Bachelor units','One bedroom units','Two bedroom units','Three bedroom units')),
+    checkboxInput('smooth', 'Add Trend Line'),
+    selectInput('color', 'Color scatterplot by:', c('UNIT','None')),
+    selectInput('facet_row', 'Vertical Split on:', c(None='.', 'UNIT')),
+    sliderInput("year", "Data from years between:", 1987, 2013,value=c(1987,2013),step=1,format = "####"),
     tags$hr(),
     tags$a(href="http://maps.google.com/maps?daddr=HOME", "Links to Google Maps of chosen cities:"),
     uiOutput("code"),
