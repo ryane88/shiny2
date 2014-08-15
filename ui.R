@@ -69,9 +69,12 @@ shinyUI(
                         via options provided in the left side panel. To view predictions for 
                         future years choose the 'Predictions' tab. The year used for the
                         prediction can be modified using the slider control"
+                        ,tags$hr()
+                        ,"Rpubs application "
+                        ,tags$a(href="http://rpubs.com/ryane88/24800", "presentation")
                         
                         ,tags$hr()
-                        ,"Reference: Rental ",
+                        ,"Link to original  rental ",
                         tags$a(href="http://data.gc.ca/data/en/dataset/1146388b-a150-4e70-98ec-eb40cb9083c8", "Data"),
                         " from data.gc.ca"
                 )
